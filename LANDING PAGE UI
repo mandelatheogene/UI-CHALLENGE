@@ -1,0 +1,161 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const JobFinderApp());
+}
+
+class JobFinderApp extends StatelessWidget {
+  const JobFinderApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: JobListingPage(),
+    );
+  }
+}
+
+class JobListingPage extends StatelessWidget {
+  const JobListingPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header with Search Bar
+          _buildHeader(),
+
+          // Recommendation Section
+          _sectionTitle("Recommendation"),
+          _buildJobCards(),
+
+          // Recent Job List
+          _sectionTitle("Recent Job List"),
+          _buildJobList(),
+        ],
+      ),
+      bottomNavigationBar: _buildBottomNav(),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: const BoxDecoration(
+        color: Colors.blue,
+        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
+      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        const Text("Hello", style: TextStyle(fontSize: 18, color: Colors.white)),
+        const Text("Leslie Alexander", style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white)),
+        const SizedBox(height: 15),
+        TextField(
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            prefixIcon: const Icon(Icons.search, color: Colors.grey),
+            hintText: "Search job, company, etc..",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: BorderSide.none),
+          ),
+        ),
+      ]),
+    );
+  }
+
+  Widget _sectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+    );
+  }
+
+  Widget _buildJobCards() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.all(10),
+      child: Row(
+        children: const [
+          JobCard(company: "Pinterest, Inc.", jobTitle: "Motion Designer", salary: "\$7K/Month", logo: "assets/pinterest.png"),
+          SizedBox(width: 10),
+          JobCard(company: "Facebook", jobTitle: "UI Designer", salary: "\$8K/Month", logo: "assets/facebook.png"),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildJobList() {
+    return Expanded(
+      child: ListView(
+        children: const [
+          JobListTile(company: "Google", jobTitle: "Product Designer", salary: "\$5K/Month", logo: "assets/google.png"),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottomNav() {
+    return BottomNavigationBar(
+      showSelectedLabels: false,
+      showUnselectedLabels: false,
+      selectedItemColor: Colors.black,
+      items: const [
+        BottomNavigationBarItem(icon: Icon(Icons.home, size: 28), label: "Home"),
+        BottomNavigationBarItem(icon: Icon(Icons.pie_chart_outline, size: 28), label: "Stats"),
+        BottomNavigationBarItem(icon: Icon(Icons.favorite_border, size: 28), label: "Favorites"),
+        BottomNavigationBarItem(icon: Icon(Icons.person, size: 28), label: "Profile"),
+      ],
+    );
+  }
+}
+
+// Job Card Widget
+class JobCard extends StatelessWidget {
+  final String company, jobTitle, salary, logo;
+  const JobCard({super.key, required this.company, required this.jobTitle, required this.salary, required this.logo});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 250,
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15), boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)]),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [
+          CircleAvatar(backgroundImage: AssetImage(logo), radius: 15),
+          const SizedBox(width: 10),
+          Text(company, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+          const Spacer(),
+          const Icon(Icons.bookmark_border),
+        ]),
+        const SizedBox(height: 10),
+        Text(jobTitle, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 10),
+        Row(children: [
+          ElevatedButton(onPressed: () {}, child: const Text("Apply Now")),
+          const Spacer(),
+          Text(salary, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        ]),
+      ]),
+    );
+  }
+}
+
+// Job List Tile Widget
+class JobListTile extends StatelessWidget {
+  final String company, jobTitle, salary, logo;
+  const JobListTile({super.key, required this.company, required this.jobTitle, required this.salary, required this.logo});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: CircleAvatar(backgroundImage: AssetImage(logo), radius: 20),
+      title: Text(jobTitle, style: const TextStyle(fontWeight: FontWeight.bold)),
+      subtitle: const Text("Senior • Fulltime • Remote", style: TextStyle(fontSize: 12, color: Colors.grey)),
+      trailing: Text(salary, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+    );
+  }
+}
