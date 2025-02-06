@@ -1,0 +1,145 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const JobDetailsApp());
+}
+
+class JobDetailsApp extends StatelessWidget {
+  const JobDetailsApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: JobDetailsPage(),
+    );
+  }
+}
+
+class JobDetailsPage extends StatelessWidget {
+  const JobDetailsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Top Image with Logo
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Image.asset('assets/office_bg.jpg', width: double.infinity, height: 200, fit: BoxFit.cover),
+                Positioned(
+                  top: 160,
+                  left: MediaQuery.of(context).size.width / 2 - 40,
+                  child: CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Colors.white,
+                    child: Image.asset('assets/google_logo.png', width: 60, height: 60),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 50),
+
+            // Job Title & Location
+            const Text("Product Designer", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            const Text("California, USA", style: TextStyle(fontSize: 16, color: Colors.grey)),
+            const SizedBox(height: 20),
+
+            // Tab Navigation
+            const TabBarSection(),
+
+            // Job Details
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SectionTitle("Job Responsibilities"),
+                  const BulletPoint("Deliver high-quality design with consistency."),
+                  const BulletPoint("Solve business problems with creative solutions."),
+                  const BulletPoint("Contribute to design discussions and maintain consistency."),
+                  const SizedBox(height: 20),
+
+                  const SectionTitle("Skills Needed"),
+                  Wrap(
+                    spacing: 10,
+                    children: const [SkillChip("Lead"), SkillChip("UX Design"), SkillChip("Problem Solving"), SkillChip("Critical")],
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Apply Button
+                  Center(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.blue, padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15)),
+                      onPressed: () {},
+                      child: const Text("Apply Now", style: TextStyle(color: Colors.white, fontSize: 16)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Tab Bar for Navigation
+class TabBarSection extends StatelessWidget {
+  const TabBarSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 4,
+      child: Column(
+        children: [
+          TabBar(
+            indicatorColor: Colors.black,
+            labelColor: Colors.black,
+            unselectedLabelColor: Colors.grey,
+            tabs: const [Tab(text: "Description"), Tab(text: "Company"), Tab(text: "Applicant"), Tab(text: "Salary")],
+          ),
+          const SizedBox(height: 10),
+        ],
+      ),
+    );
+  }
+}
+
+// Reusable Widgets
+class SectionTitle extends StatelessWidget {
+  final String text;
+  const SectionTitle(this.text, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(text, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold));
+  }
+}
+
+class BulletPoint extends StatelessWidget {
+  final String text;
+  const BulletPoint(this.text, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [const Text("• ", style: TextStyle(fontSize: 16)), Expanded(child: Text(text, style: const TextStyle(fontSize: 14, color: Colors.grey)))],
+    );
+  }
+}
+
+class SkillChip extends StatelessWidget {
+  final String label;
+  const SkillChip(this.label, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Chip(label: Text(label, style: const TextStyle(fontSize: 14, color: Colors.grey)), backgroundColor: Colors.grey[200]);
+  }
+}
